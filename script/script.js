@@ -1,125 +1,112 @@
-(function($,doc,win){
-    //Variables
-    var hour = $('#hr');
-    var min = $('#min');
-    var sec = $('#sec');
-    var liNum = 75;
-    var flip = false;
-    var intervalCounter = 0;
-    //Buttons
-    var btnStartStop = $('#btn-start-stop');
-    var labelStartStop = $('#label-start-stop');
-    var btnReset = $('#btn-reset');
-    //Elements for Animations
-    var icnClockLine = $('#icn-clock-line');
-    var icnClockLineDeg = 180;
-    var clockLines = $('.clockline').find('li');
-    var clockLines_arr = [];
-      for (var i = 0; i < clockLines.length; i++) {
-          clockLines_arr.push(clockLines[i]);
-      }
-    //Time
-    var currentTime = 0;
-    //States
-    var stop = true;
-    //Method
-    var sWatchMethod ={
-      timer: function(){
-        var interval = 10;
-        time = setInterval(function() {
-                  intervalCounter +=interval;
-                  if (!stop) {
-                   
-                    if((intervalCounter%1000)==0){
-                      currentTime += 1000;
-                      var appendHour = currentTime / (1000 * 60 * 60) | 0; 
-                      var appendMinute = currentTime % (1000 * 60 * 60) / (1000 * 60) | 0;
-                      var appendSecond = currentTime  % (1000 * 60) / 1000 | 0;
-                    
-                      appendHour = appendHour < 10 ? "0" + appendHour : appendHour;
-                      appendMinute = appendMinute < 10 ? "0" + appendMinute : appendMinute;
-                      appendSecond = appendSecond < 10 ? "0" + appendSecond : appendSecond;
-                      hour.html(appendHour);
-  min.html(appendMinute);
-  sec.html(appendSecond);
-          
-                      }
-                    
-                    //------
-                    
-                      var target = $('#clockline li').eq(liNum);
-            
-                      if(!flip){
-                      target.css('background','#339dac');
-                      }else{
-                        target.css('background','#fff');
-                      }
-                      
-                      liNum += 1;
-                      if(liNum>100){
-                        liNum=0;
-                      }
-                      if(liNum ==75){
-                        flip =!flip;
-                      }
-                  }
-  
-              }, 10); 
-      },
-      startAndStop: function(){
-  
-        $('#btn-start-stop .stop-watch').addClass('sw-click');
-        setTimeout(function(){
-          $('#btn-start-stop .stop-watch').removeClass('sw-click');
-        },200);
-        stop = !stop;
-        if(!stop){
-        labelStartStop.html('STOP');
-          if(!intervalCounter){
-           sWatchMethod.timer();
-          }
-        }else{ 
-       
-        labelStartStop.html('START');
-        //clearInterval(time);
-        //clearInterval(time2);
-        }
-        
-        
-        btnReset.css('opacity',1);
-        $('.btn-reset .bl-parts').css('transition','transform 0s');
-        btnReset.removeClass('br-click');
-        setTimeout(function(){
-        $('.btn-reset .bl-parts').css('transition','transform 0.5s');
-          },200);
-      },
-      reset: function(){
-        if(!stop){
-          stop = !stop;
-          labelStartStop.html('START');
-        }
-        clearInterval(time);
-        if(intervalCounter){
-        currentTime = 0;
-        intervalCounter = 0;
-        hour.html("00");
-        min.html("00");
-        sec.html("00");
-        liNum = 75;
-        flip = false;
-        for (var i = 0; i < clockLines.length; i++) {
-          $('#clockline li').eq(i).css('background','#fff');
-        }
-        
-        $(this).css('opacity',0.5);
-        $(this).addClass('br-click');
-        }
-      },
-      init: function(){
-        btnStartStop.on('click',sWatchMethod.startAndStop);
-        btnReset.on('click',sWatchMethod.reset); 
-      }
+let comments = [];
+
+// 一番下にスクロールする関数
+const scrollToLatestComment = () => {
+  const commentList = document.getElementById('comment-list');
+  commentList.scrollTop = commentList.scrollHeight;
+};
+
+// コメントを表示する関数
+const displayComments = () => {
+  const commentList = document.getElementById('comment-list');
+  commentList.innerText = '';
+
+  comments.forEach(comment => {
+    const listItem = document.createElement('li');
+    listItem.textContent = `${comment.content}\t${comment.timestamp}`;
+    commentList.appendChild(listItem);
+  });
+
+  scrollToLatestComment();
+};
+
+const formatTimestamp = timestamp => {
+  const hours = timestamp.getHours().toString().padStart(2, '0');
+  const minutes = timestamp.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
+// コメントを追加する関数
+const addComment = event => {
+  event.preventDefault();
+
+  //const nameInput = document.getElementById('comment-name');
+  const contentInput = document.getElementById('comment-input');
+
+  const newComment = {
+    content: contentInput.value,
+    timestamp: formatTimestamp(new Date())
+  };
+
+  comments.push(newComment);
+  displayComments();
+  contentInput.value = '';
+};
+
+// モーダル要素を取得
+const modal = document.getElementById('modal');
+
+// モーダルを表示する関数
+const showModal = () => {
+  modal.style.display = 'block';
+};
+
+// モーダルを非表示にする関数
+const hideModal = () => {
+  modal.style.display = 'none';
+};
+
+// モーダルの送信ボタンクリック時の処理
+const modalSubmit = () => {
+  const urlInput = document.getElementById('url-input');
+  const statusInput = document.getElementById('status-input');
+  let speakers = document.getElementById('speaker-list');
+
+
+
+  const url = urlInput.value;
+  const status = statusInput.value;
+
+
+  if (url && status) {
+
+    if (speakers.children.length > 0) {
+      speakers.innerText = '';
     }
-    
-    $(document).ready(sWatchMethod.init);
-    }(jQuery,document,window));
+
+    // APIエンドポイントにURLとステータスを渡してデータを取得
+    fetch(`/api/speaker?eventUrl=${url}&status=${status}`)
+      .then(response => response.json())
+      .then(datas => {
+        // データを処理する必要がある場合はここに追加する
+        datas.sort(() => Math.random() - 0.5);
+        
+        datas.forEach(data => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `${data}`;
+          speakers.appendChild(listItem);
+        });
+        // モーダルを非表示にする
+        hideModal();
+      })
+      .catch(error => {
+        console.error('Failed to fetch participants:', error);
+        // エラーメッセージを表示するなどの適切なエラーハンドリングを行う
+      });
+  }
+};
+
+// 登壇者リスト作成ボタンクリック時の処理
+const speakerGetButton = document.getElementById('speaker-get');
+speakerGetButton.addEventListener('click', showModal);
+
+// モーダルの送信ボタンクリック時の処理
+const modalSubmitButton = document.getElementById('modal-submit');
+modalSubmitButton.addEventListener('click', modalSubmit);
+
+// モーダルのキャンセルボタンクリック時の処理
+const modalCancelButton = document.getElementById('modal-cancel');
+modalCancelButton.addEventListener('click', hideModal);
+
+document.addEventListener('DOMContentLoaded', displayComments);
+document.getElementById('comment-form').addEventListener('submit', addComment);

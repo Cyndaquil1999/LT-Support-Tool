@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>LT Support Tool</title>
+  <style>
+    /* コメント欄のフレームに関するスタイルの例 */
+    #container {
+      display: flex;
+      width: auto;
+      height: 80vh;
+    }
+
+    #speaker-section {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 35%;
+      height: auto;
+    }
+
+    #speaker-list {
+      border: 1px solid #ccc;
+      height: 70%;
+      overflow: auto;
+    }
+
+    #speaker-get {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 250px;
+      margin: 0 auto;
+      padding: .9em 2em;
+      border: none;
+      border-bottom: solid 5px #0059a0;
+      border-radius: 25px;
+      background-color: #2589d0;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1em;
+      transition: .5s ease;
+    }
+
+    #speaker-get:active {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+
+    #right-panel {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #timer-section {
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 50%;
+      flex-shrink: 0;
+    }
+
+    #comment-section {
+      border: 1px solid #ccc;
+      padding: 10px;
+      flex-grow: 1;
+      overflow: auto;
+    }
+
+    #comment-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 70%;
+      border: 1px solid #ccc;
+      overflow: auto;
+    }
+
+    #comment-list li {
+      margin-bottom: 10px;
+    }
+
+    #comment-form button {
+      margin-top: 10px;
+    }
+
+    /* モーダルに関するスタイル */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal-input {
+      margin-bottom: 10px;
+    }
+
+    .modal-button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app-title">LT Support Tool</div>
+
+  <div id="container">
+    <div id="speaker-section">
+      <!-- 登壇者リストの内容 -->
+      <div id="subtitle">登壇者</div>
+      <ol id="speaker-list"></ol>
+      <button id="speaker-get">登壇者リストを作成</button>
+    </div>
+
+    <div id="right-panel">
+      <div id="timer-section">
+        <!-- タイマーの内容 -->
+        <div id="subtitle">タイマー</div>
+      </div>
+
+      <div id="comment-section">
+        <div id="subtitle">コメント欄</div>
+        <ul id="comment-list"></ul>
+
+        <form id="comment-form">
+          <input type="textarea" id="comment-input" placeholder="コメントを入力してください" required>
+          <button type="submit" id="comment-submit">送信</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- モーダル -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2>URLと登壇者ステータス</h2>
+      <input type="text" id="url-input" class="modal-input" placeholder="イベントのURLを入力してください">
+      <input type="text" id="status-input" class="modal-input" placeholder="登壇者のステータスを入力してください">
+      <button id="modal-submit" class="modal-button">開始</button>
+      <button id="modal-cancel">キャンセル</button>
+    </div>
+  </div>
+
+</body>
+<script src="./script/script.js" type='module'></script>
+
+</html>
