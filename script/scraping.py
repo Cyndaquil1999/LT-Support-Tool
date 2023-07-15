@@ -8,23 +8,14 @@ GROUP_ID = os.environ["GROUP_ID"]
 STATUS = os.environ['PARTICIPANTS_STATUS']
 
 # 所属団体のイベント一覧を取得できる
-URL = f'https://connpass.com/api/v1/event/?series_id={GROUP_ID}'
+URL = 'https://kstm.connpass.com/event/289504/' # ユーザ入力してもらう
+URL += 'participation/#participants'
 
 # ここデフォルト値では403返されます
 user_agent = "Mozilla/5.0"
 
 res = requests.get(URL, headers={"User-Agent": user_agent})
-res = res.json()
-
-
-latest_event = res['events'][0]
-
-# 直近イベントのリンクを取得
-event_url = latest_event['event_url']
-event_url += 'participation/#participants'
-
-data = requests.get(event_url, headers={"User-Agent": user_agent})
-data = data.text
+data = res.text
 
 soup = BeautifulSoup(data, 'html.parser')
 
