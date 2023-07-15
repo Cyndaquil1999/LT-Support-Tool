@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LT Support Tool</title>
+    <link rel="stylesheet" type="text/css" href="./style/style.css">
+    <style>
+        /* コメント欄のフレームに関するスタイルの例 */
+        #container {
+            display: flex;
+            width: auto;
+            height: 80vh;
+        }
+
+        #speaker-section {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 35%;
+            height: auto;
+        }
+
+        #right-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #timer-section {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 50%;
+            flex-shrink: 0;
+        }
+
+        #comment-section {
+            border: 1px solid #ccc;
+            padding: 10px;
+            flex-grow: 1;
+            overflow: auto;
+        }
+
+        #comment-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            height: 70%;
+            border: 1px solid #ccc;
+            overflow: auto;
+        }
+
+        #comment-list li {
+            margin-bottom: 10px;
+        }
+
+        #comment-form button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-title">LT Support Tool</div>
+
+    <div id="container">
+        <div id="speaker-section">
+            <!-- 登壇者リストの内容 -->
+            <div id="subtitle">登壇者</div>
+        </div>
+
+        <div id="right-panel">
+            <div id="timer-section">
+                <!-- タイマーの内容 -->
+                <div id="subtitle">タイマー</div>
+            </div>
+
+            <div id="comment-section">
+                <div id="subtitle">コメント欄</div>
+                <ul id="comment-list"></ul>
+
+                <form id="comment-form">
+                    <input type="textarea" id="comment-input" placeholder="コメントを入力してください" required>
+                    <button type="submit" id="comment-submit">送信</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="./script/script.js"></script>
+</body>
+
+</html>
