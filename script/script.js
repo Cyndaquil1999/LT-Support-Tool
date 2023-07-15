@@ -1,10 +1,12 @@
 let comments = [];
 
+
 // 一番下にスクロールする関数
 const scrollToLatestComment = () => {
   const commentList = document.getElementById('comment-list');
   commentList.scrollTop = commentList.scrollHeight;
 };
+
 
 // コメントを表示する関数
 const displayComments = () => {
@@ -26,6 +28,7 @@ const formatTimestamp = timestamp => {
   return `${hours}:${minutes}`;
 };
 
+
 // コメントを追加する関数
 const addComment = event => {
   event.preventDefault();
@@ -42,6 +45,7 @@ const addComment = event => {
   displayComments();
   contentInput.value = '';
 };
+
 
 // モーダル要素を取得
 const modal = document.getElementById('modal');
