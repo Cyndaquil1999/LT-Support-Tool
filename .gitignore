@@ -1,2 +1,6 @@
 .env
 test.ipynb
+node_module
+package*
+test.html
+test.css
