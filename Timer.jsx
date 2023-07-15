@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import './timer_style.css';
 
 function Timer() {
   const [minutes, setMinutes] = useState(0);
@@ -27,6 +28,30 @@ function Timer() {
     };
   }, [isRunning, minutes, seconds]);
 
+  const plus_1s = () => {
+    if (seconds >= 59) {
+      setMinutes(prevMinutes => prevMinutes + 1);
+      setSeconds(-1);
+    }
+    setSeconds(prevSeconds => prevSeconds + 1);
+  };
+
+  const plus_10s = () => {
+    if (seconds >= 50) {
+      setMinutes(prevMinutes => prevMinutes + 1);
+      setSeconds(prevSeconds => prevSeconds - 60);
+    }
+    setSeconds(prevSeconds => prevSeconds + 10);
+  };
+
+  const plus_1m = () => {
+    setMinutes(prevMinutes => prevMinutes + 1);
+  };
+
+  const plus_10m = () => {
+    setMinutes(prevMinutes => prevMinutes + 10);
+  };
+
   const startTimer = () => {
     if (!isRunning && (minutes > 0 || seconds > 0)) {
       setIsRunning(true);
@@ -45,33 +70,27 @@ function Timer() {
   };
 
   return (
-    <div>
-      <h1>Timer: {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}</h1>
-      <div>
-        <label>Minutes:</label>
-        <input
-          type="number"
-          value={minutes}
-          onChange={(e) => setMinutes(parseInt(e.target.value, 10))}
-          disabled={isRunning}
-        />
+    <div className='container'>
+      <div className='clock'>
+        <div className='display'>
+          {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+        </div>
+        <div className='buttons'>
+          <div>
+            <button className='clock add-time' onClick={plus_10m}>+10m</button>
+            <button className='clock add-time' onClick={plus_1m}>+1m</button>
+            <button className='clock add-time' onClick={plus_10s}>+10s</button>
+            <button className='clock add-time' onClick={plus_1s}>+1s</button>
+          </div>
+          <button className='clock set' onClick={startTimer} disabled={isRunning}>
+            Start
+          </button>
+          <button className='clock set' onClick={stopTimer} disabled={!isRunning}>
+            Stop
+          </button>
+          <button className='clock set' onClick={resetTimer}>Reset</button>
+        </div>
       </div>
-      <div>
-        <label>Seconds:</label>
-        <input
-          type="number"
-          value={seconds}
-          onChange={(e) => setSeconds(parseInt(e.target.value, 10))}
-          disabled={isRunning}
-        />
-      </div>
-      <button onClick={startTimer} disabled={isRunning}>
-        Start
-      </button>
-      <button onClick={stopTimer} disabled={!isRunning}>
-        Stop
-      </button>
-      <button onClick={resetTimer}>Reset</button>
     </div>
   );
 }
