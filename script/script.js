@@ -67,6 +67,7 @@ const modalSubmit = () => {
   const url = urlInput.value;
   const status = statusInput.value;
 
+  console.log(url);
 
   if (url && status) {
 

@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 
 
 app.get('/api/speaker', async (req, res) => {
-const eventUrl = 'https://kstm.connpass.com/event/289504/';
+const eventUrl = req.query.eventUrl;
 const status = '発表する人';
 
 
