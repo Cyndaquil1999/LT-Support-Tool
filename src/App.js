@@ -11,26 +11,16 @@ const Timer = () => {
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
 
-  
-  const playAlarmSound = useCallback((index) => {
-    const audio = new Audio(getAlarmSound(index));
-    audio.play();
-  }, []);
-
-  const getAlarmSound = useCallback((index) => {
-    const alarmSounds = [alarm1Sound, alarm2Sound];
-    return alarmSounds[index];
-  }, []);
-  
 
   useEffect(() => {
     const handleTimerTick = () => {
       if (minutes === 0 && seconds === 0) {
-        playAlarmSound(1);
+        new Audio(alarm2Sound).play();
         stopTimer();
       } else {
         if (minutes === 1 && seconds === 0) {
-          playAlarmSound(0);
+          // ここで音声を再生する処理を実装する
+          new Audio(alarm1Sound).play();
         }
         if (seconds === 0) {
           setMinutes((prevMinutes) => prevMinutes - 1);
@@ -48,7 +38,7 @@ const Timer = () => {
     return () => {
       clearInterval(intervalRef.current);
     };
-  }, [isRunning, minutes, seconds, playAlarmSound]);
+  }, [isRunning, minutes, seconds]);
 
   const plus_1s = () => {
     if (seconds >= 59) {
