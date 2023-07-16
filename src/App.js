@@ -24,27 +24,25 @@ const Timer = () => {
   
 
   useEffect(() => {
-    
-
+    const handleTimerTick = () => {
+      if (minutes === 0 && seconds === 0) {
+        playAlarmSound(1);
+        stopTimer();
+      } else {
+        if (minutes === 1 && seconds === 0) {
+          playAlarmSound(0);
+        }
+        if (seconds === 0) {
+          setMinutes((prevMinutes) => prevMinutes - 1);
+          setSeconds(59);
+        } else {
+          setSeconds((prevSeconds) => prevSeconds - 1);
+        }
+      }
+    };
 
     if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        if (minutes === 0 && seconds === 0) {
-          playAlarmSound(1);
-          stopTimer();
-          
-        } else {
-          if (minutes === 1 && seconds === 0) {
-            playAlarmSound(0);
-          }
-          if (seconds === 0) {
-            setMinutes((prevMinutes) => prevMinutes - 1);
-            setSeconds(59);
-          } else {
-            setSeconds((prevSeconds) => prevSeconds - 1);
-          }
-        }
-      }, 1000);
+      intervalRef.current = setInterval(handleTimerTick, 1000);
     }
 
     return () => {
