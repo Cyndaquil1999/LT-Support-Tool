@@ -1,5 +1,5 @@
 // App.js
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './style/App.css';
 
 import alarm1Sound from './music/001_zundamon_last1minute.wav';
