@@ -11,18 +11,21 @@ const Timer = () => {
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
 
-  const playAlarmSound = (index) => {
-    const audio = new Audio(getAlarmSound(index));
-    audio.play();
-  };
   
-  const getAlarmSound = (index) => {
-    const alarmSounds = [alarm1Sound, alarm2Sound];
-    return alarmSounds[index];
-  };
   
 
   useEffect(() => {
+    const playAlarmSound = (index) => {
+      const audio = new Audio(getAlarmSound(index));
+      audio.play();
+    };
+    
+    const getAlarmSound = (index) => {
+      const alarmSounds = [alarm1Sound, alarm2Sound];
+      return alarmSounds[index];
+    };
+
+
     if (isRunning) {
       intervalRef.current = setInterval(() => {
         if (minutes === 0 && seconds === 0) {
