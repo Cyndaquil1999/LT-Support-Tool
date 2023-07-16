@@ -1,10 +1,131 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import Timer from './Timer.jsx';
+// App.js
+import React, { useState, useEffect, useRef } from 'react';
+import './style/App.css';
+
+import alarm1Sound from './music/001_zundamon_last1minute.wav';
+import alarm2Sound from './music/001_zundamon_timeup.wav';
+
+const Timer = () => {
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const intervalRef = useRef(null);
+
+
+  useEffect(() => {
+    const handleTimerTick = () => {
+      if (minutes === 0 && seconds === 0) {
+        new Audio(alarm2Sound).play();
+        stopTimer();
+      } else {
+        if (minutes === 1 && seconds === 0) {
+          // ここで音声を再生する処理を実装する
+          new Audio(alarm1Sound).play();
+        }
+        if (seconds === 0) {
+          setMinutes((prevMinutes) => prevMinutes - 1);
+          setSeconds(59);
+        } else {
+          setSeconds((prevSeconds) => prevSeconds - 1);
+        }
+      }
+    };
+
+    if (isRunning) {
+      intervalRef.current = setInterval(handleTimerTick, 1000);
+    }
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [isRunning, minutes, seconds]);
+
+  const plus_1s = () => {
+    if (seconds >= 59) {
+      setMinutes((prevMinutes) => prevMinutes + 1);
+      setSeconds(-1);
+    }
+    setSeconds((prevSeconds) => prevSeconds + 1);
+  };
+
+  const plus_10s = () => {
+    if (seconds >= 50) {
+      setMinutes((prevMinutes) => prevMinutes + 1);
+      setSeconds((prevSeconds) => prevSeconds - 60);
+    }
+    setSeconds((prevSeconds) => prevSeconds + 10);
+  };
+
+  const plus_1m = () => {
+    setMinutes((prevMinutes) => prevMinutes + 1);
+  };
+
+  const plus_10m = () => {
+    setMinutes((prevMinutes) => prevMinutes + 10);
+  };
+
+  const startTimer = () => {
+    if (!isRunning && (minutes > 0 || seconds > 0)) {
+      setIsRunning(true);
+    }
+  };
+
+  const stopTimer = () => {
+    setIsRunning(false);
+  };
+
+  const resetTimer = () => {
+    clearInterval(intervalRef.current);
+    setMinutes(0);
+    setSeconds(0);
+    setIsRunning(false);
+  };
+
+  return (
+    <div className="timer-container">
+      <h2 className="timer-title">タイマー</h2>
+      <div className="clock">
+        <div className="display">
+          {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+        </div>
+        <div className="buttons">
+          <div>
+            <button className="clock add-time" onClick={plus_10m}>
+              +10m
+            </button>
+            <button className="clock add-time" onClick={plus_1m}>
+              +1m
+            </button>
+            <button className="clock add-time" onClick={plus_10s}>
+              +10s
+            </button>
+            <button className="clock add-time" onClick={plus_1s}>
+              +1s
+            </button>
+          </div>
+          <button className="clock set" onClick={startTimer} disabled={isRunning}>
+            Start
+          </button>
+          <button className="clock set" onClick={stopTimer} disabled={!isRunning}>
+            Stop
+          </button>
+          <button className="clock set" onClick={resetTimer}>
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const App = () => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState('');
+  const [speakers, setSpeakers] = useState([]);
+  const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
+  const [statusInput, setStatusInput] = useState('');
 
   const addComment = (content, timestamp) => {
     const newComment = {
@@ -13,6 +134,13 @@ const App = () => {
     };
     setComments((prevComments) => [...prevComments, newComment]);
   };
+
+  const handleModalOutsideClick = (event) => {
+    if (event.target.classList.contains('modal')) {
+      setShowModal(false);
+    }
+  };
+  
 
   useEffect(() => {
     scrollToLatestComment();
@@ -41,106 +169,119 @@ const App = () => {
     }
   };
 
-  const handleShowModal = () => {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'block';
-  };
-
-  const handleHideModal = () => {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'none';
-  };
-
-// speakersを表示するための処理
-const displaySpeakers = (speakers) => {
-  // ランダムにソートする
-  const shuffledSpeakers = speakers.sort(() => Math.random() - 0.5);
-
-  const speakerList = document.getElementById('speaker-list');
-  speakerList.innerText = ''; // 登壇者リストをクリア
-
-  shuffledSpeakers.forEach((speaker) => {
-    const listItem = document.createElement('li');
-    listItem.textContent = speaker;
-    speakerList.appendChild(listItem);
-  });
-};
-
-// モーダルの送信ボタンクリック時の処理
-const fetchSpeakers = async (eventUrl, status) => {
-  const response = await fetch(`http://localhost:3001/api/speaker?eventUrl=${eventUrl}&status=${status}`);
-  if (response.ok) {
-    const speakers = await response.json();
-    return speakers;
-  } else {
-    throw new Error('Failed to fetch speakers');
-  }
-};
-
-const handleModalSubmit = async () => {
-  const urlInput = document.getElementById('url-input').value;
-  const statusInput = document.getElementById('status-input').value;
-
-  if (urlInput && statusInput) {
-    try {
-      const speakers = await fetchSpeakers(urlInput, statusInput);
-      console.log(speakers); // speakers を確認する
-      handleHideModal();
-      displaySpeakers(speakers); // speakers を表示する
-
-      // speakersを表示するための処理を記述する
-    } catch (error) {
-      // エラーレスポンスやネットワークエラーなどの処理を行う
-      console.error('Error:', error);
+  const handleModalSubmit = async () => {
+    if (urlInput && statusInput) {
+      try {
+        const speakers = await fetchSpeakers(urlInput, statusInput);
+        setShowModal(false);
+        setSpeakers(shuffleArray(speakers));
+        setCurrentSpeakerIndex(0);
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
-  }
-};
+  };
 
-  
+  const fetchSpeakers = async (eventUrl, status) => {
+    const response = await fetch(`http://localhost:3001/api/speaker?eventUrl=${eventUrl}&status=${status}`);
+    if (response.ok) {
+      const speakers = await response.json();
+      return speakers;
+    } else {
+      throw new Error('Failed to fetch speakers');
+    }
+  };
+
+  const handlePrevSpeaker = () => {
+    if (speakers.length > 0) {
+      setCurrentSpeakerIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
+  const handleNextSpeaker = () => {
+    if (speakers.length > 0) {
+      setCurrentSpeakerIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
 
   return (
-    <>
-      <meta charSet="utf-8" />
-      <title>LT Support Tool</title>
-      <div id="app-title">LT Support Tool</div>
-      <div id="container">
-        <div id="speaker-section">
-          <div id="subtitle">登壇者</div>
-          <ol id="speaker-list" />
-          <button id="speaker-get" onClick={handleShowModal}>
-            登壇者リストを作成
-          </button>
+    <div className="app">
+      <h1 className="app-title">LT Host Assistant</h1>
+      <div className="container">
+        <div className="right-panel">
+          <div className="speaker-section">
+            <h2 className="subtitle">登壇者</h2>
+            <div className="speaker-list">
+              <ol>
+                {speakers.map((speaker, index) => (
+                  <li
+                    key={index}
+                    id={index === currentSpeakerIndex ? 'current-speaker' : 'speaker'}
+                    onClick={() => setCurrentSpeakerIndex(index)}
+                  >
+                    {speaker}
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="speaker-buttons">
+              <button
+                className="speaker-button"
+                onClick={handlePrevSpeaker}
+                disabled={currentSpeakerIndex === 0}
+              >
+                戻る
+              </button>
+              <button
+                className="speaker-button"
+                onClick={handleNextSpeaker}
+                disabled={currentSpeakerIndex === speakers.length - 1}
+              >
+                進む
+              </button>
+            </div>
+            <button className="speaker-get" onClick={() => setShowModal(true)}>
+              登壇者リストを作成
+            </button>
+          </div>
         </div>
-        <div id="right-panel">
-          <div id="timer-section">
-            <div id="subtitle">タイマー</div>
+        <div className="left-panel">
+          <div className="timer-section">
             <Timer />
           </div>
-          <div id="comment-section">
-            <div id="subtitle">コメント欄</div>
-            <ul id="comment-list">
+          <div className="comment-section">
+            <h2 className="subtitle">コメント欄</h2>
+            <ul className="comment-list" id="comment-list">
               {comments.map((comment, index) => (
                 <li key={index}>
                   {`${comment.content}\t${comment.timestamp}`}
                 </li>
               ))}
             </ul>
-            <form id="comment-form" onSubmit={handleSubmitComment}>
-              <input
-                type="textarea"
-                id="comment-input"
+            <form className="comment-form" onSubmit={handleSubmitComment}>
+              <textarea
+                className="comment-input"
                 placeholder="コメントを入力してください"
                 required=""
                 value={commentInput}
                 onChange={(e) => setCommentInput(e.target.value)}
               />
-              <button type="submit" id="comment-submit">
+              <button type="submit" className="comment-submit">
                 送信
               </button>
             </form>
           </div>
         </div>
       </div>
+
       <div id="modal" className="modal">
         <div className="modal-content">
           <h2>URLと登壇者ステータス</h2>
@@ -162,9 +303,10 @@ const handleModalSubmit = async () => {
           <button id="modal-cancel" onClick={handleHideModal}>
             キャンセル
           </button>
+
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 
