@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 const app = express();
 const port = 3001;
 
-app.use(cors({ origin: 'https://lt-host-assistant.deno.dev/' }));
+app.use(cors());
 
 const user_agent = 'Mozilla/5.0'
 

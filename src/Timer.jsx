@@ -1,5 +1,6 @@
+// Timer.jsx
 import React, { useState, useRef, useEffect } from 'react';
-import './timer_style.css';
+import './App.css';
 
 function Timer() {
   const [minutes, setMinutes] = useState(0);
@@ -70,7 +71,8 @@ function Timer() {
   };
 
   return (
-    <div className='container'>
+    <div className='timer-container'>
+      <h2 className="timer-title">タイマー</h2>
       <div className='clock'>
         <div className='display'>
           {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}

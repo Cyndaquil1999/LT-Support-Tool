@@ -1,124 +1,307 @@
- /* コメント欄のフレームに関するスタイルの例 */
- #container {
-   display: flex;
-   width: auto;
-   height: 80vh;
- }
+/* App.css */
+/* Google Fonts 読み込み */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
- #speaker-section {
-   border: 1px solid #ccc;
-   padding: 10px;
-   width: 35%;
-   height: auto;
- }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #7e57c2, #9c27b0);
+}
 
- #speaker-list {
-    border: 1px solid #ccc;
-    height: 70%;
-    overflow: auto;
-   
- }
+.app {
+  padding: 20px;
+}
 
-  #speaker-get {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 250px;
-    margin: 0 auto;
-    padding: .9em 2em;
-    border: none;
-    border-bottom: solid 5px #0059a0;
-    border-radius: 25px;
-    background-color: #2589d0;
-    color: #fff;
-    font-weight: 600;
-    font-size: 1em;
-    transition: .5s ease;
-   
- }
+.app-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
 
-  #speaker-get:active {
-    transform: translateY(3px);
-    border-bottom-width: 2px;
-   
- }
+.container {
+  display: grid; /* 変更 */
+  grid-template-columns: 1fr 1fr; /* 追加 */
+  grid-template-rows: auto 1fr; /* 追加 */
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
 
-  #right-panel {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-   
- }
+.left-panel {
+  grid-column: 1 / 2; /* 追加 */
+  grid-row: 1 / 3; /* 追加 */
+  display: flex;
+  flex-direction: column;
+}
 
-  #timer-section {
-    border: 1px solid #ccc;
-    padding: 10px;
-    height: 50%;
-    flex-shrink: 0;
-   
- }
+.timer-section {
+  flex: 1 0 auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-height: 35vh;
+}
 
-  #comment-section {
-    border: 1px solid #ccc;
-    padding: 10px;
-    flex-grow: 1;
-    overflow: auto;
-   
- }
+.comment-section {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  height: 35%;
+  overflow-y: auto;
+  max-height: 40vh; /* コメントリストの最大高さを指定 */
+}
 
-  #comment-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    height: 70%;
-    border: 1px solid #ccc;
-    overflow: auto;
-   
- }
 
-  #comment-list li {
-    margin-bottom: 10px;
-   
- }
+.comment-list {
+  flex: 1 1 auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto; /* 追加 */
+  margin-bottom: 15px; /* 追加 */
+  max-height: 20vh;
+}
 
-  #comment-form button {
-    margin-top: 10px;
-   
- }
+.comment-list li {
+  margin-bottom: 10px;
+}
 
- 
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
 
- /* モーダルに関するスタイル */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-   
- }
+.comment-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
-    text-align: center;
-   
- }
+.comment-submit {
+  border: none;
+  border-radius: 5px;
+  background-color: #2589d0;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  .modal-input {
-    margin-bottom: 10px;
-   
- }
+.comment-submit:hover {
+  background-color: #0059a0;
+}
 
-  .modal-button {
-    margin-top: 10px;
-   
- }
+.right-panel {
+  grid-column: 2 / 3; /* 追加 */
+  grid-row: 1 / 3; /* 追加 */
+  display: flex;
+  flex-direction: column;
+}
+
+.speaker-section {
+  flex: 1 1 auto;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.speaker-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.speaker-list ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.speaker-list li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.current-speaker {
+  background-color: #9c27b0;
+  color: #fff;
+}
+
+.speaker-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.speaker-button {
+  flex-grow: 1;
+  border: none;
+  border-radius: 5px;
+  background-color: #9c27b0;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.speaker-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.speaker-get {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #9c27b0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.speaker-get:hover {
+  background-color: #7e57c2;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.modal-button {
+  border: none;
+  border-radius: 5px;
+  background-color: #9c27b0;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-button:hover {
+  background-color: #7e57c2;
+}
+
+.modal-cancel {
+  background-color: #ccc;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-cancel:hover {
+  background-color: #999;
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+.timer-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.clock {
+  font-family: 'Share Tech Mono', monospace;
+  color: #f0f0f0;
+  text-shadow: 0 0 20px #000;
+}
+
+.display {
+  border: 4px solid rgb(92, 116, 137);
+  border-radius: 40px;
+  width: 80%;
+  font-size: 60px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 80px;
+  padding-bottom: 1px;
+  text-align: center;
+}
+
+.clock.add-time {
+  background-color: #15151e;
+  border-radius: 20%;
+  cursor: pointer;
+  margin: 20px;
+  padding: 10px;
+}
+
+.clock.set {
+  background-color: #15151e;
+  border-radius: 20%;
+  margin: 20px 30px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.clock.set:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
