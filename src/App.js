@@ -281,32 +281,29 @@ const App = () => {
           </div>
         </div>
       </div>
-      {showModal && (
-        <div className="modal"
-             onClick={handleModalOutsideClick}>
-          <div className="modal-content">
-            <h2>URLと登壇者ステータス</h2>
-            <input
-              type="text"
-              className="modal-input"
-              placeholder="イベントのURLを入力してください"
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-            />
-            <input
-              type="text"
-              className="modal-input"
-              placeholder="登壇者のステータスを入力してください"
-              value={statusInput}
-              onChange={(e) => setStatusInput(e.target.value)}
-            />
-            <button className="modal-button" onClick={handleModalSubmit}>
-              開始
-            </button>
-            <button className="modal-cancel" onClick={() => setShowModal(false)}>
-              キャンセル
-            </button>
-          </div>
+
+      <div id="modal" className="modal">
+        <div className="modal-content">
+          <h2>URLと登壇者ステータス</h2>
+          <input
+            type="text"
+            id="url-input"
+            className="modal-input"
+            placeholder="connpass上に登録のイベントのURLを入力してください"
+          />
+          <input
+            type="text"
+            id="status-input"
+            className="modal-input"
+            placeholder="登壇者のステータスを入力してください"
+          />
+          <button id="modal-submit" className="modal-button" onClick={handleModalSubmit}>
+            開始
+          </button>
+          <button id="modal-cancel" onClick={handleHideModal}>
+            キャンセル
+          </button>
+
         </div>
       )}
     </div>
