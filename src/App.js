@@ -148,7 +148,7 @@ const handleModalSubmit = async () => {
             type="text"
             id="url-input"
             className="modal-input"
-            placeholder="イベントのURLを入力してください"
+            placeholder="connpass上に登録のイベントのURLを入力してください"
           />
           <input
             type="text"
