@@ -46,7 +46,7 @@ const Timer = () => {
     return () => {
       clearInterval(intervalRef.current);
     };
-  }, [isRunning, minutes, seconds]);
+  }, [isRunning, minutes, seconds、playAlarmSound]);
 
   const plus_1s = () => {
     if (seconds >= 59) {
