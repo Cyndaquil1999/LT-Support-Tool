@@ -1,5 +1,5 @@
 // App.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './style/App.css';
 
 import alarm1Sound from './music/001_zundamon_last1minute.wav';
@@ -12,18 +12,19 @@ const Timer = () => {
   const intervalRef = useRef(null);
 
   
+  const getAlarmSound = (index) => {
+    const alarmSounds = [alarm1Sound, alarm2Sound];
+    return alarmSounds[index];
+  };
+
+  const playAlarmSound = useCallback((index) => {
+    const audio = new Audio(getAlarmSound(index));
+    audio.play();
+  }, [getAlarmSound]);
   
 
   useEffect(() => {
-    const playAlarmSound = (index) => {
-      const audio = new Audio(getAlarmSound(index));
-      audio.play();
-    };
     
-    const getAlarmSound = (index) => {
-      const alarmSounds = [alarm1Sound, alarm2Sound];
-      return alarmSounds[index];
-    };
 
 
     if (isRunning) {
