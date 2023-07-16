@@ -1,9 +1,9 @@
 // App.js
 import React, { useState, useEffect, useRef } from 'react';
-import './App.css';
+import './style/App.css';
 
-import alarm1Sound from './001_zundamon_last1minute.wav';
-import alarm2Sound from './001_zundamon_timeup.wav';
+import alarm1Sound from './music/001_zundamon_last1minute.wav';
+import alarm2Sound from './music/001_zundamon_timeup.wav';
 
 const Timer = () => {
   const [minutes, setMinutes] = useState(0);
