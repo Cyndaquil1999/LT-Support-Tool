@@ -12,15 +12,15 @@ const Timer = () => {
   const intervalRef = useRef(null);
 
   
-  const getAlarmSound = (index) => {
-    const alarmSounds = [alarm1Sound, alarm2Sound];
-    return alarmSounds[index];
-  };
-
   const playAlarmSound = useCallback((index) => {
     const audio = new Audio(getAlarmSound(index));
     audio.play();
-  }, [getAlarmSound]);
+  }, []);
+
+  const getAlarmSound = useCallback((index) => {
+    const alarmSounds = [alarm1Sound, alarm2Sound];
+    return alarmSounds[index];
+  }, []);
   
 
   useEffect(() => {
