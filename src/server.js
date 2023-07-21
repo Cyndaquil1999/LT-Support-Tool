@@ -1,9 +1,10 @@
-import express from 'express';
+import express from 'https://esm.sh/express?target=denonext';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import cheerio from 'cheerio';
 import cors from 'cors';
+import httpProxy from 'http-proxy';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -46,6 +47,30 @@ async function GetParticipationName(event_url, STATUS) {
 
 // 静的ファイルの配信
 app.use(express.static(path.join(__dirname, '')));
+
+// プロキシサーバの設定
+const proxyTarget = 'https://lt-host-assistant.deno.dev/'; // プロキシ先のエンドポイントURLに置き換えてください
+const proxy = httpProxy.createProxyServer({
+  target: proxyTarget,
+  headers: {
+    'User-Agent': user_agent,
+  },
+  secure: false
+  });
+
+
+// エラーハンドリング
+proxy.on('error', (err, req, res) => {
+  console.error('プロキシエラー:', err);
+  res.writeHead(500, { 'Content-Type': 'text/plain' });
+  res.end('プロキシエラーが発生しました');
+});
+
+
+// /api/speaker へのリクエストをプロキシサーバに中継させる
+app.use('/api/speaker', (req, res) => {
+  proxy.web(req, res);
+});
 
 
 app.get('/api/speaker', async (req, res) => {
