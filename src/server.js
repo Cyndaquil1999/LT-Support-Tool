@@ -48,6 +48,7 @@ async function GetParticipationName(event_url, STATUS) {
 // 静的ファイルの配信
 app.use(express.static(path.join(__dirname, '')));
 
+/*
 // プロキシサーバの設定
 const proxyTarget = 'https://lt-host-assistant.deno.dev/'; // プロキシ先のエンドポイントURLに置き換えてください
 const proxy = httpProxy.createProxyServer({
@@ -72,20 +73,21 @@ app.use('/api/speaker', (req, res) => {
   proxy.web(req, res);
 });
 
+*/
 
 app.get('/api/speaker', async (req, res) => {
-const eventUrl = req.query.eventUrl;
-const status = req.query.status;
+  const eventUrl = req.query.eventUrl;
+  const status = req.query.status;
 
 
-try {
-  const participants = await GetParticipationName(eventUrl, status);
-  res.json(participants);
-} catch (error) {
-  
-  res.status(500).json({ error: 'Failed to fetch participants' });
+  try {
+    const participants = await GetParticipationName(eventUrl, status);
+    res.json(participants);
+  } catch (error) {
+    
+    res.status(500).json({ error: 'Failed to fetch participants' });
 }
-  });
+});
 
 app.listen(port, () => {
   console.log(`サーバーがポート${port}で起動しました。`);
