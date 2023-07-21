@@ -183,7 +183,7 @@ const App = () => {
   };
 
   const fetchSpeakers = async (eventUrl, status) => {
-    const response = await fetch(`http://localhost:3001/api/speaker?eventUrl=${eventUrl}&status=${status}`);
+    const response = await fetch(`https://lt-host-assistant.deno.dev/eventUrl=${eventUrl}&status=${status}`);
     if (response.ok) {
       const speakers = await response.json();
       return speakers;
