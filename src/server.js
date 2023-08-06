@@ -50,7 +50,7 @@ app.use(express.static(path.join(__dirname, '')));
 
 
 // プロキシサーバの設定
-const proxyTarget = 'https://lt-host-assistant.deno.dev/'; // プロキシ先のエンドポイントURLに置き換えてください
+const proxyTarget = 'https://lt-host-assistant.deno.dev'; // プロキシ先のエンドポイントURLに置き換えてください
 const proxy = httpProxy.createProxyServer({
   target: proxyTarget,
   headers: {
