@@ -48,7 +48,7 @@ async function GetParticipationName(event_url, STATUS) {
 // 静的ファイルの配信
 app.use(express.static(path.join(__dirname, '')));
 
-
+/*
 // プロキシサーバの設定
 const proxyTarget = 'https://lt-host-assistant.deno.dev'; // プロキシ先のエンドポイントURLに置き換えてください
 const proxy = httpProxy.createProxyServer({
@@ -66,6 +66,7 @@ proxy.on('error', (err, req, res) => {
   res.writeHead(500, { 'Content-Type': 'text/plain' });
   res.end('プロキシエラーが発生しました');
 });
+*/
 
 // 登壇者情報を取得
 app.get('/api/speaker', async (req, res) => {
