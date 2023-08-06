@@ -67,19 +67,10 @@ proxy.on('error', (err, req, res) => {
   res.end('プロキシエラーが発生しました');
 });
 
-
-// /api/speaker へのリクエストをプロキシサーバに中継させる
-app.use('/api/speaker', (req, res) => {
-  proxy.web(req, res);
-});
-
-
-
+// 登壇者情報を取得
 app.get('/api/speaker', async (req, res) => {
   const eventUrl = req.query.eventUrl;
   const status = req.query.status;
-
-
   try {
     const participants = await GetParticipationName(eventUrl, status);
     res.json(participants);
@@ -88,6 +79,12 @@ app.get('/api/speaker', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch participants' });
 }
 });
+
+// /api/speaker へのリクエストをプロキシサーバに中継させる
+app.use('/api/speaker', (req, res) => {
+  proxy.web(req, res);
+});
+
 
 app.listen(port, () => {
   console.log(`サーバーがポート${port}で起動しました。`);
